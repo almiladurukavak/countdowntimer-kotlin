@@ -6,12 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AppCompatActivity
+
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.almiladurukavak.countdowntimer.util.PreferencesUtil
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import java.util.*
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
             val wakeUpTime = (nowSeconds + secondsRemaining) * 1000
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, CountDownTimerExpiredReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
             PreferencesUtil.setAlarmSetTime(nowSeconds, context)
             return wakeUpTime
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         fun removeAlarm(context: Context) {
 
             val intent = Intent(context, CountDownTimerExpiredReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.cancel(pendingIntent)
             PreferencesUtil.setAlarmSetTime(0, context)
